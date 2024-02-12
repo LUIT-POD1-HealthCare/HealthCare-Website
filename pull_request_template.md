@@ -1,6 +1,6 @@
 # Pull Request Template
 
-** Please consider the following steps before submitting a PR. **
+**Please consider the following steps before submitting a PR.**
 
 1. Confirm PR is not a duplicate
    
