@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 
 variable "bucket_name" {
-    description = "Name of the bucket"
-    type = string
-    default = "web-hosting-bucket-northwest"
+  description = "Name of the bucket"
+  type        = string
+  default     = "hcw-bucket-dev"
 }
