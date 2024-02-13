@@ -29,8 +29,7 @@ resource "aws_codepipeline" "pipeline" {
       category         = "Source"
       owner            = "ThirdParty"
       provider         = "GitHub"
-      version          = "4"
-      output_artifacts = ["DO_I_NEED_THIS"]
+      version          = "1"
 
       configuration = {
         Owner      = var.github_owner
@@ -57,6 +56,17 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
+  stage {
+    name = "Unit_Tests"
+
+    action {
+      name = "Unit_Tests"
+      category = "Test"
+      owner = "REPLACE_ME"
+      provider = "REPLACE_ME"
+      version = "REPLACE_ME"
+    }
+  }
 
   stage {
     name = "Deploy"
@@ -65,14 +75,20 @@ resource "aws_codepipeline" "pipeline" {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
-      provider        = "CodeDeploy"
+      provider        = "S3"
       input_artifacts = ["source_output"]
       version         = "1"
 
       configuration = {
-        ApplicationName     = "MyDemoApplication"
-        DeploymentGroupName = "MyDemoDeploymentGroup"
+        BucketName = "REPLACE_ME"
+        Extract    = "false"
+        ObjectKey  = "REPLACE_ME"
+        KMSEncryptionKeyARN = "REPLACE_ME"
       }
     }
   }
 }
+
+#####################################
+# CodeBuild
+#####################################
