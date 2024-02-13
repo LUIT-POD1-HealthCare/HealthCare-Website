@@ -14,6 +14,7 @@ resource "aws_s3_bucket_ownership_controls" "hosting_bucket_controls" {
   }
 }
 
+
 resource "aws_s3_bucket_public_access_block" "hosting_bucket_block" {
   bucket = aws_s3_bucket.hosting_bucket.id
 
