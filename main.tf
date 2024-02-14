@@ -7,6 +7,7 @@ resource "aws_s3_bucket" "hosting_bucket" {
   }
 }
 
+
 resource "aws_s3_bucket_website_configuration" "hosting_bucket_configuration" {
   bucket = aws_s3_bucket.hosting_bucket.id
 
@@ -83,3 +84,4 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
 output "website_url" {
   value = "http://${aws_s3_bucket.hosting_bucket.bucket}.s3-website-${var.aws_region}.amazonaws.com"
 }
+
