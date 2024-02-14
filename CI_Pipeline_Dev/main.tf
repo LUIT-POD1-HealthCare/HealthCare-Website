@@ -7,6 +7,20 @@ provider "aws" {
   region  = var.aws_region
 }
 
+
+#####################################
+# Artifact Store
+#####################################
+
+resource "aws_s3_bucket" "artifact_store" {
+  bucket = "${var.project}-artifact-store-${var.environment}"
+}
+
+resource "aws_s3_bucket_acl" "artifact_store_acl" {
+  bucket = aws_s3_bucket.artifact_store.id
+  acl    = "private"
+}
+
 #####################################
 # Pipeline
 #####################################
@@ -16,11 +30,13 @@ resource "aws_codepipeline" "pipeline" {
   role_arn      = var.codepipeline_role
   pipeline_type = var.pipeline_type
 
+  # Do I need this block?
   artifact_store {
-    location = "REPLACE_ME"
+    location = aws_s3_bucket.artifact_store.id
     type     = "S3"
   }
 
+# Source stage is correct and ready to go
   stage {
     name = "Source"
 
