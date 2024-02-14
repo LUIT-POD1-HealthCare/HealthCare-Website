@@ -17,5 +17,5 @@
  - Describe proposed changes
  - Add `@mentions` of person or team responsible for review
 
-** Remove template prior to submission **
+***Remove template before submission***
 
