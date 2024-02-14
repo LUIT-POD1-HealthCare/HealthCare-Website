@@ -5,30 +5,53 @@ resource "aws_s3_bucket" "hosting_bucket" {
     Name        = "My bucket"
     Environment = "Dev"
   }
-
-
 }
 
-resource "aws_s3_bucket_acel" "hosting_bucket_acl" {
-    bucket = aws_s3_bucket.hosting_bucket.id
-    acl = "public-read"
+resource "aws_s3_bucket_ownership_controls" "hosting_bucket_controls" {
+  bucket = aws_s3_bucket.hosting_bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
-   
+
+resource "aws_s3_bucket_public_access_block" "hosting_bucket_block" {
+  bucket = aws_s3_bucket.hosting_bucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_acl" "hosting_bucket_acl" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.hosting_bucket_controls,
+    aws_s3_bucket_public_access_block.hosting_bucket_block,
+  ]
+  bucket = aws_s3_bucket.hosting_bucket.id
+  acl    = "private"
+}
+
 resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
-    bucket =aws_s3_bucket.hosting_bucket.id
+  bucket = aws_s3_bucket.hosting_bucket.id
+  policy = data.aws_iam_policy_document.hosting_bucket_policy.json
+}
 
-    policy = jsonencode(
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                    "Sid": "AllowPublicAccesstoObjects",
-                    "Effect": "Allow",
-                    "Principal": "*",
-                    "Action": "s3:GetObject",
-                    "Resource": "arn:aws:s3:::${var.bucket_name}/*"
-            }
+data "aws_iam_policy_document" "hosting_bucket_policy" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:*",
+    
     ]
 
-
-    )
+    resources = [
+      aws_s3_bucket.hosting_bucket.arn,
+      "${aws_s3_bucket.hosting_bucket.arn}/*",
+    ]
+  }
 }
