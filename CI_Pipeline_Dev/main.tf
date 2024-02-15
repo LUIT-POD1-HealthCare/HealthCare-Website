@@ -84,11 +84,11 @@ resource "aws_iam_role" "artifact_store_role" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Action" : "sts:AssumeRole"
+        "Action" : "sts:AssumeRole",
         "Effect" : "Allow",
         "Principal" : {
           "Service" : "codepipeline.amazonaws.com"
-        },
+        }
       }
     ]
   })
@@ -101,7 +101,7 @@ resource "aws_iam_role" "artifact_store_role" {
 #####################################
 
 # Configuration works, but a manual connection is required at https://console.aws.amazon.com/codesuite/settings/connections
-# Once connection to repository is made, the connection ARN needs to be inserted into line 42 of variables.tf
+# Once connection to repository is made, the connection ARN needs to be inserted into line 61 of variables.tf
 # Also need to figure out how to filter files and triggers
 resource "aws_codepipeline" "pipeline" {
   name          = "${var.project}-pipeline-${var.environment}"

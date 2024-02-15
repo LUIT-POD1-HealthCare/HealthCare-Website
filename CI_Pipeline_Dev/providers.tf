@@ -5,4 +5,12 @@ terraform {
       version = "~> 5.36.0"
     }
   }
+  backend "s3" {
+    bucket         = "hcw-terraform-state-87364"
+    encrypt        = true
+    dynamodb_table = "hcw-state-locks"
+    key            = "pipeline/terraform.tfstate"
+    region         = "us-east-1"
+    profile        = "temp"
+  }
 }
