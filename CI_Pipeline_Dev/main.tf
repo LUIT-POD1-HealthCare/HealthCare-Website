@@ -14,7 +14,7 @@ provider "aws" {
 resource "aws_s3_bucket" "artifact_store" {
   bucket        = var.bucket_name_artifacts
   force_destroy = true
-
+  
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "artifact_store_lifecycle" {
@@ -46,35 +46,35 @@ resource "aws_s3_bucket_versioning" "artifact_store_versioning" {
 resource "aws_s3_bucket_policy" "artifact_store_policy" {
   bucket = aws_s3_bucket.artifact_store.id
   policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Id" : "SSEAndSSLPolicy",
-    "Statement" : [
+  "Version": "2012-10-17",
+  "Id": "SSEAndSSLPolicy",
+  "Statement": [
       {
-        "Sid" : "DenyUnEncryptedObjectUploads",
-        "Effect" : "Deny",
-        "Principal" : "*",
-        "Action" : "s3:PutObject",
-        "Resource" : "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
-        "Condition" : {
-          "StringNotEquals" : {
-            "s3:x-amz-server-side-encryption" : "aws:kms"
+          "Sid": "DenyUnEncryptedObjectUploads",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": "s3:PutObject",
+          "Resource": "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
+          "Condition": {
+              "StringNotEquals": {
+                  "s3:x-amz-server-side-encryption": "aws:kms"
+              }
           }
-        }
       },
       {
-        "Sid" : "DenyInsecureConnections",
-        "Effect" : "Deny",
-        "Principal" : "*",
-        "Action" : "s3:*",
-        "Resource" : "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
-        "Condition" : {
-          "Bool" : {
-            "aws:SecureTransport" : "false"
+          "Sid": "DenyInsecureConnections",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": "s3:*",
+          "Resource": "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
+          "Condition": {
+              "Bool": {
+                  "aws:SecureTransport": "false"
+              }
           }
-        }
       }
-    ]
-  })
+  ]
+})
 }
 
 #####################################
