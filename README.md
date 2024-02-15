@@ -44,3 +44,37 @@ terraform {
 ~~~
 
 In the above example, a similar naming convention has been used for the bucket key, with the exception of the project name, since that will be present in the bucket name itself. 
+
+# Implement Pull Request Workflow
+
+A pull request (PR) is opened by a GitHub project contributor to gain permission (approval) to have their contribution merged from their repository branch into the project's repository base (main) branch. This process allows asynchronous collaboration while maintaining isolated development environments between individual contributors.
+
+## Create a Pull Request Template
+
+Creating a pull request template can provide content to include in a pull request.  A PR template is simply a file named `pull_request_template` followed by a `.md` or `.txt` extension.  It can be customized to create standardized pull requests based on specific criteria and be placed in the `root`, `dev`, or `.github` directories.
+
+Some basic universal examples:
+
+**Please consider the following steps before submitting a PR**
+
+1. **Confirm PR is not a duplicate**
+
+2. **If not, confirm that:**
+
+    - Your changes were created in a separate branch
+
+    - Include a descriptive commit message
+
+    - test (if applicable)
+
+3. **Open Pull Request**
+
+    - Confirm target branch
+
+    - Create a descriptive PR title
+
+    - Describe proposed changes
+
+    - Add `@mentions` of the person or team responsible for review
+
+***Remove template before submitting.***

@@ -14,6 +14,7 @@ provider "aws" {
 resource "aws_s3_bucket" "artifact_store" {
   bucket        = var.bucket_name_artifacts
   force_destroy = true
+
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "artifact_store_lifecycle" {
@@ -42,12 +43,8 @@ resource "aws_s3_bucket_versioning" "artifact_store_versioning" {
   }
 }
 
-##### Artifact Store Bucket Policy ######
-
-resource "aws_iam_role_policy" "artifact_store_policy" {
-  name = "${var.project}_artifact_store_policy"
-  role = aws_iam_role.artifact_store_role.name
-
+resource "aws_s3_bucket_policy" "artifact_store_policy" {
+  bucket = aws_s3_bucket.artifact_store.id
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Id" : "SSEAndSSLPolicy",
@@ -55,6 +52,7 @@ resource "aws_iam_role_policy" "artifact_store_policy" {
       {
         "Sid" : "DenyUnEncryptedObjectUploads",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Action" : "s3:PutObject",
         "Resource" : "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
         "Condition" : {
@@ -66,6 +64,7 @@ resource "aws_iam_role_policy" "artifact_store_policy" {
       {
         "Sid" : "DenyInsecureConnections",
         "Effect" : "Deny",
+        "Principal" : "*",
         "Action" : "s3:*",
         "Resource" : "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
         "Condition" : {
@@ -77,24 +76,6 @@ resource "aws_iam_role_policy" "artifact_store_policy" {
     ]
   })
 }
-
-resource "aws_iam_role" "artifact_store_role" {
-  name = "${var.project}_artifact_store_role"
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Action" : "sts:AssumeRole",
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "codepipeline.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-
 
 #####################################
 # Pipeline
