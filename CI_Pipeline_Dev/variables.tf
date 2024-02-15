@@ -58,7 +58,7 @@ variable "repository" {
 
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "pipeline_dev" # Change to main for production
+  default     = "main" 
 }
 
 ############################################
