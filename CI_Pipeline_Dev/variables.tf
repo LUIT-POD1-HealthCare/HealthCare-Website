@@ -4,7 +4,7 @@
 
 variable "aws_profile" {
   description = "AWS Profile"
-  default     = "temp"
+  default     = "admin-profile"
 
 }
 
@@ -29,12 +29,17 @@ variable "environment" {
 
 variable "codepipeline_role" {
   description = "ARN of the IAM role to be used by CodePipeline"
-  default     = "arn:aws:iam::730335364473:role/CodePipelineServiceRole"
+  default     = "arn:aws:iam::835656321421:role/service-role/AWSCodePipelineServiceRole-us-east-1-hcw-pipeline-test4"
 }
 
 variable "pipeline_type" {
   description = "Type of pipeline"
-  default     = "v1"
+  default     = "V2"
+}
+
+variable "connection_arn" {
+  description = "ARN of the connection to the GitHub repository"
+  default     = "arn:aws:codestar-connections:us-east-1:835656321421:connection/d5b0d3df-e03e-403c-a2ca-b210c159e4be"
 }
 
 ############################################
@@ -51,12 +56,21 @@ variable "repository" {
   default     = "HealthCare-Website"
 }
 
-variable "github_token" {
-  description = "GitHub Token for CodePipeline access"
-  sensitive   = true
-}
-
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "main"
+  default     = "pipeline_dev"
+}
+
+############################################
+# S3
+############################################
+
+variable "bucket_name_website" {
+  description = "Name of the bucket to host the HealthCare Website"
+  default     = "hcw-bucket-test-1234"
+}
+
+variable "bucket_name_artifacts" {
+  description = "Name of the bucket to store artifacts"
+  default     = "hcw-artifacts-bucket-2024"
 }
