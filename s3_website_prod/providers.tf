@@ -5,6 +5,7 @@ terraform {
     dynamodb_table = "hcw-state-locks"
     key            = "website_bucket_prod/terraform.tfstate" 
     region         = "us-east-1"
+    
      
   }
   required_providers {
