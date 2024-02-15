@@ -47,7 +47,7 @@ resource "aws_s3_bucket_acl" "hosting_bucket_acl" {
   ]
 
   bucket = aws_s3_bucket.hosting_bucket.id
-  acl    = "public-read" # Allow public read access to the bucket
+  acl    = "private" 
 }
 
 # Define ownership controls for the hosting bucket
