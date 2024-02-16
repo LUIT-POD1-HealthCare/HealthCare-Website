@@ -67,7 +67,7 @@ variable "repository" {
 
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "main"
+  default     = "pipeline_dev"
 }
 
 ############################################
@@ -76,7 +76,7 @@ variable "github_branch" {
 
 variable "bucket_name_website" {
   description = "Name of the bucket to host the HealthCare Website"
-  default     = "hcw-bucket-dev" # Change to hcw-website-bucket-prod-2024 for production
+  default     = "hcw-website-bucket-dev-2024" # Change to hcw-website-bucket-prod-2024 for production
 }
 
 variable "bucket_name_artifacts" {

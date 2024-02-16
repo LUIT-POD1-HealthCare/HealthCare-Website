@@ -190,12 +190,12 @@ resource "aws_codebuild_project" "test" {
     image_pull_credentials_type = "CODEBUILD"
   }
   source {
-    type            = "CODEPIPELINE"
-    buildspec       = "files/test_buildspec.yml"
+    type                = "CODEPIPELINE"
+    buildspec           = "files/test_buildspec.yml"
     report_build_status = true
   }
   artifacts {
-    type = "NO_ARTIFACTS"
+    type = "CODEPIPELINE"
   }
   cache {
     type = "NO_CACHE"
@@ -219,7 +219,7 @@ resource "aws_codebuild_project" "filter" {
   }
   artifacts {
     type = "CODEPIPELINE"
-    
+
   }
   cache {
     type = "NO_CACHE"
