@@ -1,5 +1,5 @@
 terraform {
-   backend "s3" {
+  backend "s3" {
     bucket         = "hcw-terraform-state-87364"
     encrypt        = true
     dynamodb_table = "hcw-state-locks"
