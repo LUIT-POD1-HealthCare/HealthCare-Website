@@ -191,7 +191,7 @@ resource "aws_codebuild_project" "test" {
   }
   source {
     type                = "CODEPIPELINE"
-    buildspec           = "files/test_buildspec.yml"
+    buildspec           = "CI_Pipeline_Dev/files/test_buildspec.yml"
     report_build_status = true
   }
   artifacts {
@@ -214,7 +214,7 @@ resource "aws_codebuild_project" "filter" {
   }
   source {
     type                = "CODEPIPELINE"
-    buildspec           = "files/filter_buildspec.yml"
+    buildspec           = "CI_Pipeline_Dev/files/filter_buildspec.yml"
     report_build_status = true
   }
   artifacts {
