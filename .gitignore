@@ -33,5 +33,3 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-#ignore document
-.docx
