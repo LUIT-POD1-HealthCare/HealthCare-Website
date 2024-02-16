@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - cp index.html index.html
+
+artifacts:
+  files:
+    - index.html

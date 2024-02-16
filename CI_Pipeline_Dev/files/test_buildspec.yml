@@ -1,0 +1,9 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - count=$(grep -w '<title>HealthCare Hospital</title>' index.html | wc -l)
+      - if [ $count -eq 0 ]; then echo "Title not found"; exit 1; fi
+      
+    on-failure: abort
