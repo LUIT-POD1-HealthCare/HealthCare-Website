@@ -8,6 +8,13 @@ provider "aws" {
 }
 
 #####################################
+# Data Sources
+#####################################
+
+# Get website-bucket DNS here 
+
+
+#####################################
 # Artifact Store
 #####################################
 
@@ -113,7 +120,6 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
-  ############ Test stage goes here ############
   stage {
     name = "Test"
 
@@ -130,7 +136,6 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
-
   # This stage extracts the index.html file from the source code
   stage {
     name = "Filter"
@@ -177,7 +182,7 @@ resource "aws_codebuild_project" "test" {
   name          = "${var.project}-test-build-step-${var.environment}"
   description   = "Run unit test to deterimine Title exists on index.html"
   build_timeout = 5
-  service_role  = aws_iam_role.codebuild_role.arn
+  service_role  = var.codebuild_role
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
@@ -199,7 +204,7 @@ resource "aws_codebuild_project" "test" {
 resource "aws_codebuild_project" "filter" {
   name          = "${var.project}-filter-build-step-${var.environment}"
   description   = "Filter out index.html"
-  service_role  = aws_iam_role.codebuild_role.arn
+  service_role  = var.codebuild_role
   build_timeout = "5"
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"

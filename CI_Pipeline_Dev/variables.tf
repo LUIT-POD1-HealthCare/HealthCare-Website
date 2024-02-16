@@ -43,6 +43,15 @@ variable "connection_arn" {
 }
 
 ############################################
+# CodeBuild
+############################################
+
+variable "codebuild_role" {
+  description = "ARN of the IAM role to be used by CodeBuild"
+  default     = "arn:aws:iam::730335364473:role/CodeBuildServiceRole"
+}
+
+############################################
 # GitHub
 ############################################
 
