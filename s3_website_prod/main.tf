@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "hosting_bucket" {
   bucket = var.bucket_name # Set the bucket name from a variable
 
   tags = {
-    Name        = "Northwest website Dev" # Descriptive name for the bucket
+    Name        = "Northwest website Prod" # Descriptive name for the bucket
     Environment = "Prod"                   # Environment tag to denote development stage
   }
 }
