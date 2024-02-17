@@ -3,8 +3,8 @@ version: 0.2
 phases:
   build:
     commands:
-      - 'cp index.html index.html'
-
+      - echo "Extracting the index.html file"
+      
 artifacts:
   files:
     - index.html
