@@ -8,13 +8,20 @@ provider "aws" {
 }
 
 #####################################
+# Data Sources
+#####################################
+
+# Get website-bucket DNS here 
+
+
+#####################################
 # Artifact Store
 #####################################
 
 resource "aws_s3_bucket" "artifact_store" {
   bucket        = var.bucket_name_artifacts
   force_destroy = true
-  
+
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "artifact_store_lifecycle" {
@@ -46,35 +53,35 @@ resource "aws_s3_bucket_versioning" "artifact_store_versioning" {
 resource "aws_s3_bucket_policy" "artifact_store_policy" {
   bucket = aws_s3_bucket.artifact_store.id
   policy = jsonencode({
-  "Version": "2012-10-17",
-  "Id": "SSEAndSSLPolicy",
-  "Statement": [
+    "Version" : "2012-10-17",
+    "Id" : "SSEAndSSLPolicy",
+    "Statement" : [
       {
-          "Sid": "DenyUnEncryptedObjectUploads",
-          "Effect": "Deny",
-          "Principal": "*",
-          "Action": "s3:PutObject",
-          "Resource": "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
-          "Condition": {
-              "StringNotEquals": {
-                  "s3:x-amz-server-side-encryption": "aws:kms"
-              }
+        "Sid" : "DenyUnEncryptedObjectUploads",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Action" : "s3:PutObject",
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
+        "Condition" : {
+          "StringNotEquals" : {
+            "s3:x-amz-server-side-encryption" : "aws:kms"
           }
+        }
       },
       {
-          "Sid": "DenyInsecureConnections",
-          "Effect": "Deny",
-          "Principal": "*",
-          "Action": "s3:*",
-          "Resource": "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
-          "Condition": {
-              "Bool": {
-                  "aws:SecureTransport": "false"
-              }
+        "Sid" : "DenyInsecureConnections",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Action" : "s3:*",
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.artifact_store.id}/*",
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
           }
+        }
       }
-  ]
-})
+    ]
+  })
 }
 
 #####################################
@@ -114,6 +121,42 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
   stage {
+    name = "Test"
+
+    action {
+      name            = "Test"
+      category        = "Test"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      input_artifacts = ["source_output"]
+      version         = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.test.name
+      }
+    }
+  }
+  # This stage extracts the index.html file from the source code
+  stage {
+    name = "Filter"
+
+    action {
+      name             = "Filter"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["filter_output"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.filter.name
+      }
+    }
+  }
+
+  ##############################################
+  stage {
     name = "Deploy"
 
     action {
@@ -121,7 +164,7 @@ resource "aws_codepipeline" "pipeline" {
       category        = "Deploy"
       owner           = "AWS"
       provider        = "S3"
-      input_artifacts = ["source_output"]
+      input_artifacts = ["filter_output"]
       version         = "1"
 
       configuration = {
@@ -129,5 +172,56 @@ resource "aws_codepipeline" "pipeline" {
         Extract    = "true"
       }
     }
+  }
+}
+############################################
+# CodeBuild Projects
+############################################
+
+resource "aws_codebuild_project" "test" {
+  name          = "${var.project}-test-build-step-${var.environment}"
+  description   = "Run unit test to deterimine Title exists on index.html"
+  build_timeout = 5
+  service_role  = var.codebuild_role
+  environment {
+    compute_type                = "BUILD_GENERAL1_SMALL"
+    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
+    type                        = "LINUX_CONTAINER"
+    image_pull_credentials_type = "CODEBUILD"
+  }
+  source {
+    type                = "CODEPIPELINE"
+    buildspec           = "CI_Pipeline_Dev/files/test_buildspec.yml"
+    report_build_status = true
+  }
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+  cache {
+    type = "NO_CACHE"
+  }
+}
+resource "aws_codebuild_project" "filter" {
+  name          = "${var.project}-filter-build-step-${var.environment}"
+  description   = "Filter out index.html"
+  service_role  = var.codebuild_role
+  build_timeout = "5"
+  environment {
+    compute_type                = "BUILD_GENERAL1_SMALL"
+    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
+    type                        = "LINUX_CONTAINER"
+    image_pull_credentials_type = "CODEBUILD"
+  }
+  source {
+    type                = "CODEPIPELINE"
+    buildspec           = "CI_Pipeline_Dev/files/filter_buildspec.yml"
+    report_build_status = true
+  }
+  artifacts {
+    type = "CODEPIPELINE"
+
+  }
+  cache {
+    type = "NO_CACHE"
   }
 }

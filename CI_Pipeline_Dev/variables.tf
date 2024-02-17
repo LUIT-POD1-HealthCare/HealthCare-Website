@@ -43,6 +43,15 @@ variable "connection_arn" {
 }
 
 ############################################
+# CodeBuild
+############################################
+
+variable "codebuild_role" {
+  description = "ARN of the IAM role to be used by CodeBuild"
+  default     = "arn:aws:iam::730335364473:role/CodeBuildServiceRole"
+}
+
+############################################
 # GitHub
 ############################################
 
@@ -58,7 +67,7 @@ variable "repository" {
 
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "main" 
+  default     = "main"
 }
 
 ############################################
@@ -67,7 +76,7 @@ variable "github_branch" {
 
 variable "bucket_name_website" {
   description = "Name of the bucket to host the HealthCare Website"
-  default     = "hcw-bucket-dev" # Change to hcw-website-bucket-prod-2024 for production
+  default     = "hcw-website-bucket-dev-2024" # Change to hcw-website-bucket-prod-2024 for production
 }
 
 variable "bucket_name_artifacts" {
