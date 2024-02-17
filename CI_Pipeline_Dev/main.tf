@@ -154,8 +154,6 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
-
-  ##############################################
   stage {
     name = "Deploy"
 
@@ -168,12 +166,24 @@ resource "aws_codepipeline" "pipeline" {
       version         = "1"
 
       configuration = {
-        BucketName = var.bucket_name_website
+        BucketName = var.bucket_name_website_dev
         Extract    = "true"
       }
     }
   }
 }
+
+#### Add Manual Approval Stage Here #####
+
+
+
+
+
+#### Add Deploy to Production Bucket Stage Here #####
+
+
+
+
 ############################################
 # CodeBuild Projects
 ############################################

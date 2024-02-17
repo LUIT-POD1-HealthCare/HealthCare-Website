@@ -74,9 +74,14 @@ variable "github_branch" {
 # S3
 ############################################
 
-variable "bucket_name_website" {
+variable "bucket_name_website_dev" {
   description = "Name of the bucket to host the HealthCare Website"
-  default     = "hcw-website-bucket-dev-2024" # Change to hcw-website-bucket-prod-2024 for production
+  default     = "hcw-website-bucket-dev-2024" 
+}
+
+variable "bucket_name_website_prod" {
+  description = "Name of the bucket to host the HealthCare Website"
+  default     = "hcw-website-bucket-prod-2024"
 }
 
 variable "bucket_name_artifacts" {
