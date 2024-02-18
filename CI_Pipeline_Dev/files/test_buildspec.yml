@@ -23,7 +23,7 @@ phases:
         fi'
 
     finally:
-      - 'COMMIT_SHA=$(git rev-parse HEAD)'
+      - 'COMMIT_SHA=$CODEBUILD_RESOLVED_SOURCE_VERSION'
       - 'curl -X POST \
         -H "Authorization: token ${GITHUB_TOKEN}" \
         -H "Accept: application/vnd.github.v3+json" \
