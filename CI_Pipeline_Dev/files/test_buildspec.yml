@@ -2,8 +2,26 @@ version: 0.2
 
 phases:
   build:
+    on-failure: ABORT
     commands:
       - "count=$(grep -w '<title>HealthCare Hospital</title>' index.html | wc -l)"
-      - 'if [ $count -eq 0 ]; then echo "Title not found"; exit 1; fi'
+      - 'if [ $count -eq 0 ]; then
+          echo "Title not found"; 
+          BUILD_STATUS="FAILED";
+          DESCRIPTION="Status Check Failed: Title not found"; 
+          exit 1; 
+        else
+          echo "Title found";
+          BUILD_STATUS="SUCCEEDED";
+          DESCRIPTION="Status Check Passed: Title found";
+          exit 0;
+        fi'
+
+    finally:
+      - 'COMMIT_SHA=$(git rev-parse HEAD)'
+      - 'curl -X POST \
+        -H "Authorization: token ${GITHUB_TOKEN}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        -d "{\"state\": \"$BUILD_STATUS\", \"context\": \"description: $DESCRIPTION\"} \
+        "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPOSITORY}/statuses/$COMMIT_SHA"'
       
-    on-failure: abort

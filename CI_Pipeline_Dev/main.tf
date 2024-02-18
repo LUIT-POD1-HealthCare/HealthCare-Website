@@ -203,6 +203,18 @@ resource "aws_codebuild_project" "test" {
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    environment_variable {
+      name  = "GITHUB_TOKEN"
+      value = var.github_token
+    }
+    environment_variable {
+      name  = "GITHUB_OWNER"
+      value = var.github_owner
+    }
+    environment_variable {
+      name  = "GITHUB_REPOSITORY"
+      value = var.repository
+    }
   }
   source {
     type                = "CODEPIPELINE"

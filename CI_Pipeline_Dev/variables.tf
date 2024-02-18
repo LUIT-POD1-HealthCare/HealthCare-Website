@@ -70,6 +70,11 @@ variable "github_branch" {
   default     = "pipeline_dev_status_checks"
 }
 
+variable "github_token" {
+  description = "GitHub token for status checks API requests"
+  sensitive   = true
+}
+
 ############################################
 # S3
 ############################################
