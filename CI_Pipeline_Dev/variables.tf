@@ -67,7 +67,7 @@ variable "repository" {
 
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "main"
+  default     = "pipeline_dev_status_checks"
 }
 
 ############################################
