@@ -11,8 +11,12 @@ provider "aws" {
 # Data Sources
 #####################################
 
-# Get website-bucket DNS here 
-
+data "aws_s3_bucket" "website_bucket_dev" {
+  bucket = var.bucket_name_website_dev
+}
+data "aws_s3_bucket" "website_bucket_prod" {
+  bucket = var.bucket_name_website_prod
+}
 
 #####################################
 # Artifact Store
@@ -89,8 +93,9 @@ resource "aws_s3_bucket_policy" "artifact_store_policy" {
 #####################################
 
 # Configuration works, but a manual connection is required at https://console.aws.amazon.com/codesuite/settings/connections
-# Once connection to repository is made, the connection ARN needs to be inserted into line 61 of variables.tf
+# Once connection to repository is made, the connection ARN needs to be inserted into line 41 of variables.tf
 # Also need to figure out how to filter files and triggers
+
 resource "aws_codepipeline" "pipeline" {
   name          = "${var.project}-pipeline-${var.environment}"
   role_arn      = var.codepipeline_role

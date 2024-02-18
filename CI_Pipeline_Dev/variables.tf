@@ -76,7 +76,7 @@ variable "github_branch" {
 
 variable "bucket_name_website_dev" {
   description = "Name of the bucket to host the HealthCare Website"
-  default     = "hcw-website-bucket-dev-2024" 
+  default     = "hcw-website-bucket-dev-2024"
 }
 
 variable "bucket_name_website_prod" {
