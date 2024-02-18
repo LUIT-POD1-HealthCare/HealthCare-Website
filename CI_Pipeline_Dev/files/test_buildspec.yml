@@ -2,9 +2,9 @@ version: 0.2
 
 phases:
   install:
-  commands:
-    - apt-get update
-    - apt-get install git -y
+    commands:
+      - apt-get update
+      - apt-get install git -y
     
   build:
     on-failure: ABORT
