@@ -27,4 +27,4 @@ phases:
 
     post_build:
       commands:
-        - aws codepipeline put-job-failure-result --job-id $CODEBUILD_BUILD_ID --failure-details "{\"message\": \"$COMMIT_SHA\"}" --output text
+        - aws codepipeline put-job-failure-result --job-id $CODEBUILD_BUILD_ID --failure-details "{\"message\": \"Test Message\"}" --output text
