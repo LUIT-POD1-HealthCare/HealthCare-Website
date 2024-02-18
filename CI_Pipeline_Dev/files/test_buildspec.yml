@@ -24,4 +24,7 @@ phases:
 
     finally:
       - 'COMMIT_SHA=$CODEBUILD_RESOLVED_SOURCE_VERSION'
-      - 'curl example.com'
+
+    post_build:
+      commands:
+        - aws codepipeline put-job-failure-result --job-id $CODEBUILD_BUILD_ID --failure-details "{\"message\": \"$COMMIT_SHA\"}" --output text
