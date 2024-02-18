@@ -253,4 +253,5 @@ resource "aws_codebuild_project" "filter" {
   }
 }
 
-## Status check test
+## Trigger test
+
