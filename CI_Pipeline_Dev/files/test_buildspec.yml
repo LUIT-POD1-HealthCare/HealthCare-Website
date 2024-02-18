@@ -12,12 +12,12 @@ phases:
       - "count=$(grep -w '<title>HealthCare Hospital</title>' index.html | wc -l)"
       - 'if [ $count -eq 0 ]; then
           echo "Title not found"; 
-          BUILD_STATUS="FAILED";
+          BUILD_STATUS="failure";
           DESCRIPTION="Status Check Failed: Title not found"; 
           exit 1; 
         else
           echo "Title found";
-          BUILD_STATUS="SUCCEEDED";
+          BUILD_STATUS="success";
           DESCRIPTION="Status Check Passed: Title found";
           exit 0;
         fi'
