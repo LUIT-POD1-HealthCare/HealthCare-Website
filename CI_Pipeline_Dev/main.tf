@@ -253,4 +253,4 @@ resource "aws_codebuild_project" "filter" {
   }
 }
 
-## For testing pipeline trigger
+## For testing testing buildspec.yml
