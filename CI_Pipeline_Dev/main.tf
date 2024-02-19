@@ -96,6 +96,8 @@ resource "aws_s3_bucket_policy" "artifact_store_policy" {
 # Once connection to repository is made, the connection ARN needs to be inserted into line 41 of variables.tf
 # Also need to figure out how to filter files and triggers
 
+# Pipeline runs on merged pull requests
+
 resource "aws_codepipeline" "pipeline" {
   name          = "${var.project}-pipeline-${var.environment}"
   role_arn      = var.codepipeline_role
@@ -125,22 +127,7 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
-  # stage {
-  #   name = "Test"
 
-  #   action {
-  #     name            = "Test"
-  #     category        = "Test"
-  #     owner           = "AWS"
-  #     provider        = "CodeBuild"
-  #     input_artifacts = ["source_output"]
-  #     version         = "1"
-
-  #     configuration = {
-  #       ProjectName = aws_codebuild_project.test.name
-  #     }
-  #   }
-  # }
   # This stage extracts the index.html file from the source code
   stage {
     name = "Filter"
@@ -160,10 +147,10 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
   stage {
-    name = "Deploy"
+    name = "Deploy_to_Dev_Bucket"
 
     action {
-      name            = "Deploy"
+      name            = "Deploy_to_Dev_Bucket"
       category        = "Deploy"
       owner           = "AWS"
       provider        = "S3"
@@ -193,6 +180,7 @@ resource "aws_codepipeline" "pipeline" {
 # CodeBuild Projects
 ############################################
 
+# This CodeBuild project runs on pull requests and reports status checks to GitHub
 resource "aws_codebuild_project" "test" {
   name          = "${var.project}-test-build-step-${var.environment}"
   description   = "Run unit test to deterimine Title exists on index.html"
@@ -221,6 +209,10 @@ resource "aws_codebuild_project" "test" {
     buildspec           = "CI_Pipeline_Dev/files/test_buildspec.yml"
     location            = "https://github.com/${var.github_owner}/${var.repository}.git"
     report_build_status = true
+    build_status_config {
+      context = "Check index.html for Title"
+    }
+
   }
   artifacts {
     type = "NO_ARTIFACTS"
