@@ -67,7 +67,7 @@ variable "repository" {
 
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "pipeline_dev_status_checks"
+  default     = "pipeline_dev"
 }
 
 variable "github_token" {
@@ -89,7 +89,12 @@ variable "bucket_name_website_prod" {
   default     = "hcw-website-bucket-prod-2024"
 }
 
-variable "bucket_name_artifacts" {
-  description = "Name of the bucket to store artifacts"
-  default     = "hcw-artifacts-bucket-2024"
+variable "bucket_prefix_artifacts" {
+  description = "Name of the bucket prefix to store artifacts"
+  default     = "hcw-artifacts-bucket"
+}
+
+variable "bucket_suffix_artifacts" {
+  description = "Name of the bucket suffix to store artifacts"
+  default     = "2024"
 }

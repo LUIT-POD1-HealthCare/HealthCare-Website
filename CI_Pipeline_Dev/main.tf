@@ -23,7 +23,7 @@ data "aws_s3_bucket" "website_bucket_prod" {
 #####################################
 
 resource "aws_s3_bucket" "artifact_store" {
-  bucket        = var.bucket_name_artifacts
+  bucket        = "${var.bucket_prefix_artifacts}-${var.environment}-${var.bucket_suffix_artifacts}"
   force_destroy = true
 
 }
@@ -191,18 +191,6 @@ resource "aws_codebuild_project" "test" {
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-    environment_variable {
-      name  = "GITHUB_TOKEN"
-      value = var.github_token
-    }
-    environment_variable {
-      name  = "GITHUB_OWNER"
-      value = var.github_owner
-    }
-    environment_variable {
-      name  = "GITHUB_REPOSITORY"
-      value = var.repository
-    }
   }
   source {
     type                = "GITHUB"
@@ -270,6 +258,3 @@ resource "aws_codebuild_project" "filter" {
     type = "NO_CACHE"
   }
 }
-
-## Testing status checks on pull requests
-
