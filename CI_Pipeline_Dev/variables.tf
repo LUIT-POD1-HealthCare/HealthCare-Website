@@ -20,7 +20,7 @@ variable "project" {
 
 variable "environment" {
   description = "Environment"
-  default     = "dev"
+  default     = "prod"
 }
 
 ############################################
@@ -70,6 +70,11 @@ variable "github_branch" {
   default     = "main"
 }
 
+variable "github_token" {
+  description = "GitHub token for status checks API requests"
+  sensitive   = true
+}
+
 ############################################
 # S3
 ############################################
@@ -84,7 +89,12 @@ variable "bucket_name_website_prod" {
   default     = "hcw-website-bucket-prod-2024"
 }
 
-variable "bucket_name_artifacts" {
-  description = "Name of the bucket to store artifacts"
-  default     = "hcw-artifacts-bucket-2024"
+variable "bucket_prefix_artifacts" {
+  description = "Name of the bucket prefix to store artifacts"
+  default     = "hcw-artifacts-bucket"
+}
+
+variable "bucket_suffix_artifacts" {
+  description = "Name of the bucket suffix to store artifacts"
+  default     = "2024"
 }

@@ -9,7 +9,7 @@ terraform {
     bucket         = "hcw-terraform-state-87364"
     encrypt        = true
     dynamodb_table = "hcw-state-locks"
-    key            = "pipeline/terraform.tfstate"
+    key            = "pipeline/prod/terraform.tfstate"
     region         = "us-east-1"
     profile        = "temp"
   }
