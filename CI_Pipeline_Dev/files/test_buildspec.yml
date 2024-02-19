@@ -23,5 +23,5 @@ phases:
         fi'
 
     finally:
-      - 'curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" -d "{\"state\": \"$BUILD_STATUS\", \"context\": \"description: $DESCRIPTION\"}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPOSITORY}/statuses/$CODEBUILD_RESOLVED_SOURCE_VERSION"'
+      - 'curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" -d "{\"state\": \"$BUILD_STATUS\", \"context\": \"$DESCRIPTION\"}" "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPOSITORY}/statuses/$CODEBUILD_RESOLVED_SOURCE_VERSION"'
     
