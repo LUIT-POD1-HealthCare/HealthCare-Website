@@ -279,5 +279,5 @@ resource "aws_codebuild_project" "filter" {
   }
 }
 
-## Test
+## Testing status checks on pull requests
 
