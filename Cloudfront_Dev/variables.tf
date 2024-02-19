@@ -8,20 +8,3 @@ variable "bucket_name" {
   type        = string
   default     = "hcw-bucket-test"
 }
-
-# For these variable code to work, Add terraform.tfvars file and place only the variable value in it.
-variable "aws_profile" {
-  description = "Name of the AWS Profile being used"
-  type        = string
-}
-
-variable "aws_access_key_id" {
-  description = "Access key"
-  type        = string
-
-}
-
-variable "aws_secret_access_key" {
-  description = "Secret Access Key"
-  type        = string
-}

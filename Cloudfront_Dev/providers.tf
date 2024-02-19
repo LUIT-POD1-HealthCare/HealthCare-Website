@@ -1,4 +1,4 @@
-# modified to run with cloudfront code
+# modified to run with cloudfront code - note backend doesn't allow variables only direct values.
 terraform {
   backend "s3" {
     bucket         = "hcw-terraform-state-87364"
@@ -18,6 +18,5 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region  = var.aws_region
-  profile = var.aws_profile
+  region  = var.aws_region  
 }
