@@ -125,22 +125,22 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
-  stage {
-    name = "Test"
+  # stage {
+  #   name = "Test"
 
-    action {
-      name            = "Test"
-      category        = "Test"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["source_output"]
-      version         = "1"
+  #   action {
+  #     name            = "Test"
+  #     category        = "Test"
+  #     owner           = "AWS"
+  #     provider        = "CodeBuild"
+  #     input_artifacts = ["source_output"]
+  #     version         = "1"
 
-      configuration = {
-        ProjectName = aws_codebuild_project.test.name
-      }
-    }
-  }
+  #     configuration = {
+  #       ProjectName = aws_codebuild_project.test.name
+  #     }
+  #   }
+  # }
   # This stage extracts the index.html file from the source code
   stage {
     name = "Filter"
@@ -217,17 +217,43 @@ resource "aws_codebuild_project" "test" {
     }
   }
   source {
-    type                = "CODEPIPELINE"
+    type                = "GITHUB"
     buildspec           = "CI_Pipeline_Dev/files/test_buildspec.yml"
+    location            = "https://github.com/${var.github_owner}/${var.repository}.git"
     report_build_status = true
   }
   artifacts {
-    type = "CODEPIPELINE"
+    type = "NO_ARTIFACTS"
+    name = null
   }
   cache {
     type = "NO_CACHE"
   }
 }
+
+resource "aws_codebuild_webhook" "webhook" {
+  project_name = aws_codebuild_project.test.name
+  build_type   = "BUILD"
+
+  filter_group {
+    filter {
+      type    = "EVENT"
+      pattern = "PULL_REQUEST_CREATED"
+    }
+    filter {
+      type    = "BASE_REF"
+      pattern = "refs/heads/${var.github_branch}"
+    }
+  }
+}
+
+resource "aws_codebuild_source_credential" "github" {
+  auth_type   = "PERSONAL_ACCESS_TOKEN"
+  server_type = "GITHUB"
+  token       = var.github_token
+}
+
+
 resource "aws_codebuild_project" "filter" {
   name          = "${var.project}-filter-build-step-${var.environment}"
   description   = "Filter out index.html"
@@ -253,4 +279,5 @@ resource "aws_codebuild_project" "filter" {
   }
 }
 
-## For testing pipeline trigger
+## Test
+

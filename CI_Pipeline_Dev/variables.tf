@@ -73,7 +73,6 @@ variable "github_branch" {
 variable "github_token" {
   description = "GitHub token for status checks API requests"
   sensitive   = true
-  default     = ""
 }
 
 ############################################
