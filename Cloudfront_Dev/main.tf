@@ -70,7 +70,8 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
         Effect    = "Allow"
         Principal = "*"
         Action = [
-          "s3:GetObject"
+          "s3:GetObject",
+          "s3:PutObject" # To upload the index.html file to the bucket
         ]
         Resource = [
           "${aws_s3_bucket.hosting_bucket.arn}/*"
@@ -83,4 +84,17 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
 # Output the URL of the hosted static website
 output "website_url" {
   value = "http://${aws_s3_bucket.hosting_bucket.bucket}.s3-website-${var.aws_region}.amazonaws.com"
+}
+
+# Upload a file to the hosting bucket - static website html file
+# remove this block if not needed any more
+resource "aws_s3_object" "hcw-website-bucket-prod-2024-cftest" {
+  bucket = var.bucket_name
+  key    = "index.html" #name on the s3 bucket
+  source = "../index.html"
+
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("path/to/file"))}"
+  etag = filemd5("../index.html")
 }
