@@ -217,12 +217,20 @@ resource "aws_codebuild_webhook" "webhook" {
 
   filter_group {
     filter {
+      type    = "BASE_REF"
+      pattern = "refs/heads/${var.github_branch}"
+    }
+    filter {
       type    = "EVENT"
       pattern = "PULL_REQUEST_CREATED"
     }
     filter {
-      type    = "BASE_REF"
-      pattern = "refs/heads/${var.github_branch}"
+      type    = "EVENT"
+      pattern = "PULL_REQUEST_UPDATED"
+    }
+    filter {
+      type    = "EVENT"
+      pattern = "PULL_REQUEST_REOPENED"
     }
   }
 }
@@ -248,7 +256,6 @@ resource "aws_codebuild_project" "filter" {
   source {
     type                = "CODEPIPELINE"
     buildspec           = "CI_Pipeline_Dev/files/filter_buildspec.yml"
-    report_build_status = true
   }
   artifacts {
     type = "CODEPIPELINE"
