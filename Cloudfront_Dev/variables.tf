@@ -26,3 +26,9 @@ variable "aws_secret_access_key" {
   type        = string
   sensitive   = true
 }
+
+# variable for origin id usually s3 bucket location where we have s3 bucket website
+variable "origin_id" {
+  type    = string
+  default = "hcw-website-bucket-prod-2024-cftest"
+}

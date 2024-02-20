@@ -1,41 +1,33 @@
 ######################### CloudFront Begins #########################
-#### Test code only ####
+#### Dev Env code only ####
 locals {
-  s3_origin_id   = "arn:aws:cloudfront::730335364473:distribution/E3EP66N76TI2YC"
+  s3_origin_id   = var.origin_id # to avoid confusion, created this origin id
   s3_domain_name = "${aws_s3_bucket.hosting_bucket.bucket}.s3-website-${var.aws_region}.amazonaws.com"
 }
 
 
-resource "aws_cloudfront_origin_access_control" "origin_access_control_id" {
+resource "aws_cloudfront_origin_access_control" "origin_access_control_origin_type" {
   name                              = "origin_access_control"
-  description                       = "Origin Access Control Policy"
+  description                       = "Origin Access Control origin type Policy"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_distribution" "s3_distribution" {
+resource "aws_cloudfront_distribution" "s3_cf_distribution" {
   origin {
     domain_name              = aws_s3_bucket.hosting_bucket.bucket_regional_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.origin_access_control_id.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.origin_access_control_origin_type.id
     origin_id                = local.s3_origin_id
   }
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "Some comment"
+  comment             = "LUIT Healthcare Site"
   default_root_object = "index.html"
 
-  #   logging_config {
-  #     include_cookies = false
-  #     bucket          = "mylogs.s3.amazonaws.com"
-  #     prefix          = "myprefix"
-  #   }
-
-  #   aliases = ["healthcareluit.com", "healthcareluit.home.com"]
-
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
 
@@ -56,8 +48,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   # Cache behavior with precedence 0
   ordered_cache_behavior {
     path_pattern     = "/content/immutable/*"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
 
     forwarded_values {
@@ -98,12 +90,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
+
+
   price_class = "PriceClass_200"
 
   restrictions {
     geo_restriction {
       restriction_type = "whitelist"
-      locations        = ["US", "CA", "GB", "DE"]
+      locations        = ["US"]
     }
   }
 
