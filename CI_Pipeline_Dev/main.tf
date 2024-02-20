@@ -224,14 +224,18 @@ resource "aws_codebuild_webhook" "webhook" {
       type    = "BASE_REF"
       pattern = "refs/heads/${var.github_branch}"
     }
-    # filter {
-    #   type    = "EVENT"
-    #   pattern = "PULL_REQUEST_UPDATED"
-    # }
-    # filter {
-    #   type    = "EVENT"
-    #   pattern = "PULL_REQUEST_REOPENED"
-    # }
+  }
+  filter_group {
+    filter {
+      type    = "EVENT"
+      pattern = "PULL_REQUEST_UPDATED"
+    }
+  }
+  filter_group {
+    filter {
+      type    = "EVENT"
+      pattern = "PULL_REQUEST_REOPENED"
+    }
   }
 }
 
