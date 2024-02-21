@@ -6,7 +6,7 @@ variable "aws_region" {
 variable "bucket_name" {
   description = "Name of the bucket"
   type        = string
-  default     = "hcw-website-bucket-prod-2024-cftest"
+  default     = "hcw-website-bucket-prod-2024"
 }
 
 # For these variable code to work, Add terraform.tfvars file and place only the variable value in it.
@@ -27,8 +27,3 @@ variable "aws_secret_access_key" {
   sensitive   = true
 }
 
-# variable for origin id usually s3 bucket location where we have s3 bucket website
-variable "origin_id" {
-  type    = string
-  default = "hcw-website-bucket-prod-2024-cftest"
-}
