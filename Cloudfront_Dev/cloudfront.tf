@@ -1,7 +1,7 @@
 ######################### CloudFront Begins #########################
 #### Dev Env code only ####
 locals {
-  s3_origin_id   = var.origin_id # to avoid confusion, created this origin id
+  s3_origin_id   = var.bucket_name
   s3_domain_name = "${aws_s3_bucket.hosting_bucket.bucket}.s3-website-${var.aws_region}.amazonaws.com"
 }
 
