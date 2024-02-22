@@ -94,8 +94,6 @@ resource "aws_cloudfront_distribution" "s3_cf_distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-
-
   price_class = "PriceClass_200"
 
   restrictions {
