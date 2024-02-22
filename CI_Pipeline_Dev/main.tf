@@ -163,19 +163,41 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
+  stage {
+    name = "Manual_Approval"
+
+    action {
+      name     = "Manual_Approval"
+      category = "Approval"
+      owner    = "AWS"
+      provider = "Manual"
+      version  = "1"
+
+
+      configuration = {
+        CustomData         = "Approve the deployment of the website to the production bucket"
+        ExternalEntityLink = data.aws_s3_bucket.website_bucket_dev.website_endpoint
+      }
+    }
+  }
+  stage {
+    name = "Deploy_to_Prod_Bucket"
+
+    action {
+      name            = "Deploy_to_Prod_Bucket"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "S3"
+      input_artifacts = ["filter_output"]
+      version         = "1"
+
+      configuration = {
+        BucketName = var.bucket_name_website_prod
+        Extract    = "true"
+      }
+    }
+  }
 }
-
-#### Add Manual Approval Stage Here #####
-
-
-
-
-
-#### Add Deploy to Production Bucket Stage Here #####
-
-
-
-
 ############################################
 # CodeBuild Projects
 ############################################
