@@ -268,7 +268,6 @@ resource "aws_codebuild_project" "filter" {
   source {
     type                = "CODEPIPELINE"
     buildspec           = "CI_Pipeline_Dev/files/filter_buildspec.yml"
-    report_build_status = true
   }
   artifacts {
     type = "CODEPIPELINE"
