@@ -17,7 +17,3 @@ output "codebuild_endpoint" {
   description = "URL of the CodeBuild test endpoint"
   value       = aws_codebuild_webhook.webhook.payload_url
 }
-output "codebuild_webhook_id" {
-  description = "ID of the CodeBuild test webhook"
-  value       = aws_codebuild_webhook.webhook.id
-}
