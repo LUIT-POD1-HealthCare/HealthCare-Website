@@ -253,7 +253,15 @@ resource "aws_codebuild_source_credential" "github" {
   token       = var.github_token
 }
 
-
+# resource "github_repository_webhook" "webhook" {
+#   repository = var.repository
+#   events     = ["pull_request"]
+#   active     = true
+#   configuration {
+#     url          = aws_codebuild_webhook.webhook.payload_url
+#     content_type = "json"
+#   }
+# }
 resource "aws_codebuild_project" "filter" {
   name          = "${var.project}-filter-build-step-${var.environment}"
   description   = "Filter out index.html"
@@ -266,8 +274,8 @@ resource "aws_codebuild_project" "filter" {
     image_pull_credentials_type = "CODEBUILD"
   }
   source {
-    type                = "CODEPIPELINE"
-    buildspec           = "CI_Pipeline_Dev/files/filter_buildspec.yml"
+    type      = "CODEPIPELINE"
+    buildspec = "CI_Pipeline_Dev/files/filter_buildspec.yml"
   }
   artifacts {
     type = "CODEPIPELINE"
