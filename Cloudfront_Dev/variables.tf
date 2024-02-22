@@ -14,16 +14,3 @@ variable "aws_profile" {
   description = "Name of the AWS Profile being used"
   type        = string
 }
-
-variable "aws_access_key_id" {
-  description = "Access key"
-  type        = string
-  sensitive   = true
-}
-
-variable "aws_secret_access_key" {
-  description = "Secret Access Key"
-  type        = string
-  sensitive   = true
-}
-
