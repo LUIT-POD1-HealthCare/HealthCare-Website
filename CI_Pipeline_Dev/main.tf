@@ -253,7 +253,6 @@ resource "aws_codebuild_source_credential" "github" {
   token       = var.github_token
 }
 
-
 resource "aws_codebuild_project" "filter" {
   name          = "${var.project}-filter-build-step-${var.environment}"
   description   = "Filter out index.html"
@@ -266,9 +265,8 @@ resource "aws_codebuild_project" "filter" {
     image_pull_credentials_type = "CODEBUILD"
   }
   source {
-    type                = "CODEPIPELINE"
-    buildspec           = "CI_Pipeline_Dev/files/filter_buildspec.yml"
-    report_build_status = true
+    type      = "CODEPIPELINE"
+    buildspec = "CI_Pipeline_Dev/files/filter_buildspec.yml"
   }
   artifacts {
     type = "CODEPIPELINE"
