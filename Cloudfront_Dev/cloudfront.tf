@@ -1,10 +1,14 @@
-######################### CloudFront Begins #########################
-#### Dev Env code only ####
-locals {
-  s3_origin_id   = var.bucket_name
-  s3_domain_name = "${aws_s3_bucket.hosting_bucket.bucket}.s3-website-${var.aws_region}.amazonaws.com"
+################################################################
+# Data Source - Website Bucket Prod
+################################################################
+
+data "aws_s3_bucket" "website_bucket_prod" {
+  bucket = var.bucket_name
 }
 
+################################################################
+# Cloudfront Distribution
+################################################################
 
 resource "aws_cloudfront_origin_access_control" "origin_access_control_origin_type" {
   name                              = "origin_access_control"
@@ -16,9 +20,9 @@ resource "aws_cloudfront_origin_access_control" "origin_access_control_origin_ty
 
 resource "aws_cloudfront_distribution" "s3_cf_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.hosting_bucket.bucket_regional_domain_name
+    domain_name              = data.aws_s3_bucket.website_bucket_prod.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.origin_access_control_origin_type.id
-    origin_id                = local.s3_origin_id
+    origin_id                = var.bucket_name
   }
 
   enabled             = true
@@ -29,7 +33,7 @@ resource "aws_cloudfront_distribution" "s3_cf_distribution" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = var.bucket_name
 
     forwarded_values {
       query_string = false
@@ -50,7 +54,7 @@ resource "aws_cloudfront_distribution" "s3_cf_distribution" {
     path_pattern     = "/content/immutable/*"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = var.bucket_name
 
     forwarded_values {
       query_string = false
@@ -73,7 +77,7 @@ resource "aws_cloudfront_distribution" "s3_cf_distribution" {
     path_pattern     = "/content/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = var.bucket_name
 
     forwarded_values {
       query_string = false
@@ -108,4 +112,8 @@ resource "aws_cloudfront_distribution" "s3_cf_distribution" {
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+}
+
+output "cloudfront_distribution_url" {
+  value = aws_cloudfront_distribution.s3_cf_distribution.domain_name
 }
