@@ -13,5 +13,3 @@ phases:
           echo "Title found";
           exit 0;
         fi'
-
-    

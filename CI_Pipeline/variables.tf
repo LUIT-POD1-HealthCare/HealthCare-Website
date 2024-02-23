@@ -35,6 +35,7 @@ variable "codepipeline_role" {
 variable "pipeline_type" {
   description = "Type of pipeline"
   default     = "V2"
+
 }
 
 variable "connection_arn" {

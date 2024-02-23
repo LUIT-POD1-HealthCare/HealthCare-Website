@@ -197,6 +197,7 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
+
   stage {
     name = "Invalidate_CloudFront"
 
@@ -214,6 +215,8 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
 }
+
+
 
 ############################################
 # CodeBuild Projects
@@ -233,6 +236,7 @@ resource "aws_codebuild_project" "test" {
   }
   source {
     type                = "GITHUB"
+
     buildspec           = "CI_Pipeline/files/test_buildspec.yml"
     location            = "https://github.com/${var.github_owner}/${var.repository}.git"
     report_build_status = true
@@ -292,7 +296,6 @@ resource "aws_codebuild_source_credential" "github" {
   token       = var.github_token
 }
 
-
 resource "aws_codebuild_project" "filter" {
   name          = "${var.project}-filter-build-step-${var.environment}"
   description   = "Filter out index.html"
@@ -339,3 +342,4 @@ resource "aws_codebuild_project" "invalidate" {
     type = "NO_CACHE"
   }
 }
+
