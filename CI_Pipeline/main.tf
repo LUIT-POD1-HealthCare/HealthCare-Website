@@ -333,8 +333,7 @@ resource "aws_codebuild_project" "invalidate" {
     buildspec           = "CI_Pipeline/files/invalidate_cache_buildspec.yml"
   }
   artifacts {
-    type = "NO_ARTIFACTS"
-    name = null
+    type = "CODEPIPELINE"
   }
   cache {
     type = "NO_CACHE"
