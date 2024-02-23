@@ -115,7 +115,3 @@ resource "aws_cloudfront_distribution" "s3_cf_distribution" {
 output "cloudfront_distribution_url" {
   value = aws_cloudfront_distribution.s3_cf_distribution.domain_name
 }
-
-output "cloudfront_distribution_id" {
-  value = aws_cloudfront_distribution.s3_cf_distribution.id
-}
