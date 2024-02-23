@@ -197,22 +197,6 @@ resource "aws_codepipeline" "pipeline" {
       }
     }
   }
-  stage{
-    name = "Invalidate_CloudFront"
-
-    action {
-      name = "Invalidate_CloudFront"
-      category = "Build"
-      owner = "AWS"
-      provider = "CodeBuild"
-      input_artifacts = ["source_output"]
-      version = "1"
-
-      configuration = {
-        ProjectName = aws_codebuild_project.invalidate.name
-      }
-    }
-  }
 }
 
 ############################################
@@ -311,29 +295,6 @@ resource "aws_codebuild_project" "filter" {
   artifacts {
     type = "CODEPIPELINE"
 
-  }
-  cache {
-    type = "NO_CACHE"
-  }
-}
-
-resource "aws_codebuild_project" "invalidate" {
-  name          = "${var.project}-invalidate-build-step-${var.environment}"
-  description   = "Invalidate CloudFront"
-  service_role  = var.codebuild_role
-  build_timeout = "5"
-  environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-  }
-  source {
-    type                = "CODEPIPELINE"
-    buildspec           = "CI_Pipeline/files/invalidate_cache_buildspec.yml"
-  }
-  artifacts {
-    type = "CODEPIPELINE"
   }
   cache {
     type = "NO_CACHE"
