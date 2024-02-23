@@ -20,7 +20,7 @@ variable "project" {
 
 variable "environment" {
   description = "Environment"
-  default     = "prod"
+  default     = "dev"
 }
 
 ############################################
@@ -67,7 +67,7 @@ variable "repository" {
 
 variable "github_branch" {
   description = "GitHub branch"
-  default     = "main"
+  default     = "pipeline_dev"
 }
 
 variable "github_token" {
