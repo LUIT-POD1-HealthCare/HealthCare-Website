@@ -13,4 +13,5 @@ phases:
     - pip3 install boto3
   
   build:
+    commands:
     - python3 CI_Pipeline/files/invalidate_cache.py
