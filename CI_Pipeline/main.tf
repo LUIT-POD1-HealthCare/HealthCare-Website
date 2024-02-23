@@ -288,7 +288,7 @@ resource "aws_codebuild_project" "filter" {
   }
   source {
     type      = "CODEPIPELINE"
-    buildspec = "CI_Pipeline_Dev/files/filter_buildspec.yml"
+    buildspec = "CI_Pipeline/files/filter_buildspec.yml"
   }
   artifacts {
     type = "CODEPIPELINE"
