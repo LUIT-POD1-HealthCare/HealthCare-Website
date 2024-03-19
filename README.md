@@ -1,8 +1,6 @@
 # HealthCare-Website
 Transition HealthCare North's website from its current costly and high-maintenance cloud server setup to a more economical and efficient AWS service, specifically leveraging a static S3 website.
 
-#Diagram-pending
-
 # Naming Standards
 This section is designed to implement a clear and concise set of naming standards for AWS resources, as well as a folder structure for this repository.
 
